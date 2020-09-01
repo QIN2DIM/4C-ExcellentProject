@@ -6,4 +6,3 @@ if __name__ == '__main__':
     print(magic_msg('>>> 该脚本的采集任务使用协程模式，请合理配置采集功率!', 'm'))
     print(magic_msg('>>> 用餐愉快~', 'g'))
 
-    print(load_data_from_id_set(mode='spider_key'))
