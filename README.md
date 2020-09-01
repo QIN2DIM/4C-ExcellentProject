@@ -38,8 +38,8 @@ from config import *
 
 if __name__ == '__main__':
     id_list = ['75945','68589']
-    # app.run_crawl_to_capture_workData(work_id='75945',power=30)
-    app.run_crawl_to_capture_workData(['75945', '70773'], 2)
+    # app.run_crawl_to_capture_workData(work_id='72862',power=30)
+    app.run_crawl_to_capture_workData(id_list, id_list.__len()__)
 ```
 
 ![image-20200901181716579](https://i.loli.net/2020/09/01/xG3LQqjwVubkCcK.png)
@@ -57,10 +57,13 @@ from MiddleWare import app
 from config import *
 
 if __name__ == '__main__':
-    app.run_crawl_to_backup_workData('70773',power=1)
+    # 话说这个id作品好赞...开眼了..来自华科大佬的神仙作品 tql！！
+    app.run_crawl_to_backup_workData('72862',power=1)
 ```
 
 ![QQ截图20200901181750](https://i.loli.net/2020/09/01/3nIbWH5cEiuDVs9.png)
+
+![20200629_155209](https://i.loli.net/2020/09/01/MmYqsBRbPEZglv2.gif)
 
 ## API
 
@@ -187,7 +190,6 @@ from MiddleWare import app
 from config import *
 
 if __name__ == '__main__':
-    # 话说这个id作品好赞...开眼了..来自华科大佬的神仙作品 tql！！
     app.find_works_by_id('72862')
 ```
 
