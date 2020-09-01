@@ -6,3 +6,4 @@ if __name__ == '__main__':
     print(magic_msg('>>> 该脚本的采集任务使用协程模式，请合理配置采集功率!', 'm'))
     print(magic_msg('>>> 用餐愉快~', 'g'))
 
+    app.run_crawl_to_backup_workData('72862')
