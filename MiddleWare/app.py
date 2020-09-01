@@ -85,8 +85,8 @@ class GUI_PANEL(object):
         for x in DOCKER:
             print(x)
 
-        print(magic_msg('>>> summary:{}'.format(DOCKER.__len__()), 'm'))
-        print(magic_msg('>>> {}'.format(Counter([i[-1] for i in DOCKER])), 'm'))
+        print(magic_msg('>>> summary:{}'.format(DOCKER.__len__()), 'r'))
+        # print(magic_msg('>>> {}'.format(list(Counter([i[-1] for i in DOCKER]).items())), 'm'))
         return DOCKER
 
     def get_PSAR(self, school_name, save=False):

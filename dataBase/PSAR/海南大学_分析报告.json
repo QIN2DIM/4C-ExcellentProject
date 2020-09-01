@@ -1,0 +1,38 @@
+{
+    "海南大学": {
+        "成果概要": {
+            "一等奖": 1,
+            "二等奖": 4,
+            "三等奖": 2
+        },
+        "作品细节": {
+            "一等奖": [
+                {
+                    "http://2020.jsjds.com.cn/chaxun/?keys=70775": "基于时序热词挖掘的COVID-19舆情监测和情感分析系统"
+                }
+            ],
+            "二等奖": [
+                {
+                    "http://2020.jsjds.com.cn/chaxun/?keys=70983": "多场景智控医疗机器人"
+                },
+                {
+                    "http://2020.jsjds.com.cn/chaxun/?keys=72687": "海洋牧场-水下多功能工作平台"
+                },
+                {
+                    "http://2020.jsjds.com.cn/chaxun/?keys=75194": "基于差分萤火虫算法的盲水印系统"
+                },
+                {
+                    "http://2020.jsjds.com.cn/chaxun/?keys=77243": "HiCollage-基于微信小程序的学生校务管理"
+                }
+            ],
+            "三等奖": [
+                {
+                    "http://2020.jsjds.com.cn/chaxun/?keys=71095": "校代达微信小程序"
+                },
+                {
+                    "http://2020.jsjds.com.cn/chaxun/?keys=71634": "防疫口罩监控系统"
+                }
+            ]
+        }
+    }
+}
