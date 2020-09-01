@@ -142,10 +142,10 @@ class GUI_PANEL(object):
             sum(list(self.temp_list_985.values())),
         ))
 
-        print('[211]{}'.format(self.temp_list_211))
-        print('[985]{}'.format(self.temp_list_985))
-        print('[ALL]{}'.format(sorted(
-            tuple(Counter(self.school_name).items()),
+        print('[211]{}...'.format(list(self.temp_list_211.items())[:5]))
+        print('[985]{}...'.format(list(self.temp_list_985.items())[:5]))
+        print('[ALL]{}...'.format(sorted(
+            tuple(Counter(self.school_name).items())[:5],
             key=lambda m: (m[-1], m[0]), reverse=True
         )))
 

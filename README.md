@@ -6,7 +6,19 @@
 
 ## Quick Start
 
-进入`main.py`,合理设置`power`控制协程功率 ，运行程序即可采集**第一批**决赛入围作品的数据
+进入`main.py`,按照说明书合理调用`API` ，运行程序即可调度爬虫采集数据。
+
+- **环境预备**
+
+  - 部分API使用python3+selenium的采集方案，请确保电脑安装了`Chrome`以及对应版本的`Chromedriver.exe`，有经验的朋友可以直接修改源码~
+
+- **安装第三方依赖**
+
+  - 在工程文件中打开`Terminal` ；
+
+    - `pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple`
+
+    
 
 ### 采集作品信息
 
@@ -30,7 +42,7 @@ if __name__ == '__main__':
     app.run_crawl_to_capture_workData(['75945', '70773'], 2)
 ```
 
-
+![image-20200901181716579](https://i.loli.net/2020/09/01/xG3LQqjwVubkCcK.png)
 
 ### 拷贝作品信息
 
@@ -48,7 +60,7 @@ if __name__ == '__main__':
     app.run_crawl_to_backup_workData('70773',power=1)
 ```
 
-
+![QQ截图20200901181750](https://i.loli.net/2020/09/01/3nIbWH5cEiuDVs9.png)
 
 ## API
 
@@ -72,45 +84,60 @@ from MiddleWare import app
 from config import *
 
 if __name__ == '__main__':
-    app.get_school_psar(school_name='海南大学',save=True)
+    app.get_school_psar(school_name='华中科技大学',save=True)
 ```
 
-- `/海南大学_分析报告.json`
+- `/华中科技大学_分析报告.json`
 
 ```json
 {
-    "海南大学": {
+    "华中科技大学": {
         "成果概要": {
-            "一等奖": 1,
-            "二等奖": 4,
+            "一等奖": 2,
+            "二等奖": 8,
             "三等奖": 2
         },
         "作品细节": {
             "一等奖": [
                 {
-                    "http://2020.jsjds.com.cn/chaxun/?keys=70775": "基于时序热词挖掘的COVID-19舆情监测和情感分析系统"
+                    "http://2020.jsjds.com.cn/chaxun/?keys=72849": "皖江之阴，青山之阳；青阳有腔，放遇一欢。"
+                },
+                {
+                    "http://2020.jsjds.com.cn/chaxun/?keys=72862": " 红楼梦·可视化赏析信息交互系统"
                 }
             ],
             "二等奖": [
                 {
-                    "http://2020.jsjds.com.cn/chaxun/?keys=70983": "多场景智控医疗机器人"
+                    "http://2020.jsjds.com.cn/chaxun/?keys=72750": "Limfx科研博客"
                 },
                 {
-                    "http://2020.jsjds.com.cn/chaxun/?keys=72687": "海洋牧场-水下多功能工作平台"
+                    "http://2020.jsjds.com.cn/chaxun/?keys=72764": "梦·山海"
                 },
                 {
-                    "http://2020.jsjds.com.cn/chaxun/?keys=75194": "基于差分萤火虫算法的盲水印系统"
+                    "http://2020.jsjds.com.cn/chaxun/?keys=72795": "济世方舱"
                 },
                 {
-                    "http://2020.jsjds.com.cn/chaxun/?keys=77243": "HiCollage-基于微信小程序的学生校务管理"
+                    "http://2020.jsjds.com.cn/chaxun/?keys=72796": "山哈彩带"
+                },
+                {
+                    "http://2020.jsjds.com.cn/chaxun/?keys=72800": "敦煌·梵音"
+                },
+                {
+                    "http://2020.jsjds.com.cn/chaxun/?keys=72821": "放大镜下的昆虫世界"
+                },
+                {
+                    "http://2020.jsjds.com.cn/chaxun/?keys=72822": "九华折扇——数字化非遗文化信息可视化设计"
+                },
+                {
+                    "http://2020.jsjds.com.cn/chaxun/?keys=74879": "别让它灭绝"
                 }
             ],
             "三等奖": [
                 {
-                    "http://2020.jsjds.com.cn/chaxun/?keys=71095": "校代达微信小程序"
+                    "http://2020.jsjds.com.cn/chaxun/?keys=72783": "皮影传承，戏中人生"
                 },
                 {
-                    "http://2020.jsjds.com.cn/chaxun/?keys=71634": "防疫口罩监控系统"
+                    "http://2020.jsjds.com.cn/chaxun/?keys=72799": "希冀"
                 }
             ]
         }
@@ -139,13 +166,13 @@ if __name__ == '__main__':
     app.find_works_by_level(level='一等奖', class_='')
 ```
 
-
+![image-20200901180705173](https://i.loli.net/2020/09/01/XJazcpSA9sbjO5y.png)
 
 ### 作品查询~比赛摘要
 
 - `app.get_summary()`可打印决赛成绩概况~~（后来觉得这个功能太鸡肋了，就没再写这个API，可凑合着看看）~~
 
-
+![image-20200901180943555](https://i.loli.net/2020/09/01/lwi1PuNOf9v4QE2.png)
 
 ### 作品查询~链接直达
 
@@ -153,13 +180,25 @@ if __name__ == '__main__':
   - key = 作品编号，仅支持单个字符串输入
   - goto = 是否打开网页。若为True，则使用默认浏览器打开作品首页
 - ~~确实又是个很鸡肋的API~~
+- 运行后会在`/dataBase/PSAR/ASH.json`中留下临时文件
+
+```python
+from MiddleWare import app
+from config import *
+
+if __name__ == '__main__':
+    # 话说这个id作品好赞...开眼了..来自华科大佬的神仙作品 tql！！
+    app.find_works_by_id('72862')
+```
 
 
 
 ### works_id数据加载
 
 - 由于表数据结构比较乱，我已经写好了一个全局load id 的函数，使用方法也很粗暴，调用该函数并传入`spider_key`，即可获取含表头的在库id列表。获取列表后使用切片去除表头候即可获得干净的数据~
-- 因为合成BASE文件有点大，故使用`csv.field_size_limit()`捕获数据流。函数源码如下
+- 因为合成BASE文件有点大，故使用`csv.field_size_limit()`捕获数据流。
+
+函数源码如下：
 
 ```python
 # config.py
