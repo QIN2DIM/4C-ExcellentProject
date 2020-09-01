@@ -46,6 +46,8 @@ if __name__ == '__main__':
 
 ### 拷贝作品信息
 
+[《BackupSpider of CNJSJ》](https://www.yuque.com/docs/share/148083ac-c703-4f7c-978b-321b4ae8e6d9?#) 
+
 - `app.run_crawl_to_capture_workData(work_id: str or list,power: int=4)`
   - work_id = 作品编号，支持**单个字符串**输入以及**List**多个字符串输入
     - **参数传递方案同上**
