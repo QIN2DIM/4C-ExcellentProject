@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
 ![QQ截图20200901181750](https://i.loli.net/2020/09/01/3nIbWH5cEiuDVs9.png)
 
-![20200629_155209](https://i.loli.net/2020/09/01/MmYqsBRbPEZglv2.gif)
+- ![20200629_155209](https://i.loli.net/2020/09/01/MmYqsBRbPEZglv2.gif)
 
 ## API
 
