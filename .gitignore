@@ -124,3 +124,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 *.mhtml
+dataBase/error_log.txt

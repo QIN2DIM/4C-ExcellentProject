@@ -250,7 +250,7 @@ USER_KEY = ''
 VIEWER = {}
 
 # chromedriver.exe path ,若驱动没配置系统环境变量，请在此赋值绝对路径
-CHROME_CODE_PATH = ''
+CHROME_CODE_PATH = os.path.dirname(__file__) + '/MiddleWare/chromedriver.exe'
 
 # MTH离线网页文件的存储文件夹路径，默认./dataBase/BACKUP，若更改，请使用绝对路径
 BACKUP_OUT_PATH = os.path.join(ROOT_DATABASE, 'BACKUP')

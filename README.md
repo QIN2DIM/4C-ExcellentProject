@@ -2,7 +2,11 @@
 
 利用官网接口，以及公开数据，采集作品信息
 
-- 咳咳- -本人大二狗，有幸作为项目负责人参与了今年的中国大学生计算机设计大赛，并拿下了某赛道的国一
+> 国内部分地区局域网可能无法正常显示本文图片，请跳转[语雀同步文档](https://www.yuque.com/docs/share/c056d958-0c22-482f-8a9f-7cd86d178ef2?#)
+
+
+
+- 咳咳- -本人大二狗，有幸作为项目负责人参与了今年的中国大学生计算机设计大赛，并拿下了大数据赛道的国一
 - 做这个小脚本的初衷也比较简单垂直~无意中发现赛区官网开了一个查询作品信息的接口，我随意检索了几个视觉设计方向的作品(嗯！麻麻问我为啥跪着查成绩)咳咳。。本科生能独立完成这样的作品，真是太震撼了！嗯我说的就是72862的华科小姐姐团队(捂脸)。。。
 - 咳咳- -第一次写README如此罗嗦，总而言之该脚本主要功能就是**采集作品信息**和**拷贝作品信息**，具体使用方法看下边儿；希望各位也能挖到宝~
 - 我已经提前拷贝了一份官网数据库，大约40G的数据量，之后若C4-2020的接口关闭，我会重发一版指向RDS云存储的版本。
@@ -16,16 +20,21 @@
 
 - **环境预备**
 
-  - 部分API使用python3+selenium的采集方案，请确保电脑安装了`Chrome`以及对应版本的`Chromedriver.exe`，有经验的朋友可以直接修改源码~
+  - 部分API使用python3+selenium的采集方案，且该脚本仅支持Chrome驱动。本人预装`./MiddleWare/chromedriver.exe`，请将谷歌浏览器更新到最新版本。
 
 - **安装第三方依赖**
 
   - 在工程文件中打开`Terminal` ；
 
-    - `pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple`
-
+    ```python
+    # 更新pip
+    python -m pip install --upgrade pip
     
+    # 通过依赖文档，批量索引第三方库
+    pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+    ```
 
+  - 部分包可能需要手动安装
 ### 采集作品信息
 
 - `app.run_crawl_to_capture_workData(work_id: str or list,power: int)`
@@ -69,7 +78,7 @@ if __name__ == '__main__':
     app.run_crawl_to_backup_workData('72862',power=1)
 ```
 
-![QQ截图20200901181750](https://i.loli.net/2020/09/01/3nIbWH5cEiuDVs9.png)
+<img src="https://i.loli.net/2020/09/01/3nIbWH5cEiuDVs9.png" alt="QQ截图20200901181750" style="zoom:80%;" />
 
 ![20200629_155209](https://i.loli.net/2020/09/01/MmYqsBRbPEZglv2.gif)
 
