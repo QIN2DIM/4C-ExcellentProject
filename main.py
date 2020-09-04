@@ -6,7 +6,7 @@ if __name__ == '__main__':
     all_id = load_data_from_id_set('spider_key')[1:]
 
     # 拷贝所有MTH
-    app.run_crawl_to_backup_workData(all_id, 5)
+    app.run_crawl_to_backup_workData(all_id, 12)
 
     # 采集所有数据
     # app.run_crawl_to_capture_workData(all_id, 10)

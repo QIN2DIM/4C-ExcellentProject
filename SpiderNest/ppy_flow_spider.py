@@ -92,7 +92,7 @@ class WebCopySpider(object):
         api.get(target)
 
         # 等待元素全部加载
-        WebDriverWait(api, 30).until(EC.presence_of_all_elements_located)
+        # WebDriverWait(api, 30).until(EC.presence_of_all_elements_located)
 
         res = api.execute_cdp_cmd('Page.captureSnapshot', {})
 
