@@ -29,3 +29,19 @@ http://2020.jsjds.com.cn/chaxun?keys=N/A
 [2020-09-05 00:40:13]
 http://2020.jsjds.com.cn/chaxun?keys=N/A
 [Errno 2] No such file or directory: 'D:\\Alkaid\\中国大学生计算机设计大赛_抓取/dataBase\\BACKUP\\N/A.mhtml'
+
+[2020-09-05 00:58:38]
+http://2020.jsjds.com.cn/chaxun?keys=N/A
+[Errno 2] No such file or directory: 'D:\\Alkaid\\中国大学生计算机设计大赛_抓取/dataBase\\BACKUP\\N/A.mhtml'
+
+[2020-09-05 00:58:41]
+http://2020.jsjds.com.cn/chaxun?keys=N/A
+[Errno 2] No such file or directory: 'D:\\Alkaid\\中国大学生计算机设计大赛_抓取/dataBase\\BACKUP\\N/A.mhtml'
+
+[2020-09-05 00:58:49]
+http://2020.jsjds.com.cn/chaxun?keys=N/A
+[Errno 2] No such file or directory: 'D:\\Alkaid\\中国大学生计算机设计大赛_抓取/dataBase\\BACKUP\\N/A.mhtml'
+
+[2020-09-05 00:58:52]
+http://2020.jsjds.com.cn/chaxun?keys=N/A
+[Errno 2] No such file or directory: 'D:\\Alkaid\\中国大学生计算机设计大赛_抓取/dataBase\\BACKUP\\N/A.mhtml'

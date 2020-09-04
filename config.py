@@ -182,10 +182,10 @@ def load_data_from_id_set(mode) -> list:
         reader = csv.reader(f)
         data = [i for i in reader]
         if mode == 'spider_key':
-            return [i[1] for i in data]
+            return [i[1] for i in data if i[1] != 'N/A']
 
 
-def INIT():
+def INIT_USER_AGENT():
     import tempfile
     if 'fake_useragent_0.1.11.json' not in os.listdir(tempfile.gettempdir()):
         os.system('copy {} {}'.format(
@@ -194,10 +194,11 @@ def INIT():
         ))
 
 
-INIT()
-print(magic_msg('>>> 欢迎使用中国大学生计算机设计大赛数据挖掘爬虫！', 'r'))
-print(magic_msg('>>> 该脚本的采集任务使用协程模式，请合理配置采集功率!', 'm'))
+INIT_USER_AGENT()
+print(magic_msg('>>> 欢迎使用|=< C4-2020中国大学生计算机设计大赛_数据采集爬虫(C4DmSpider) >=|', 'r'))
+print(magic_msg('>>> 该脚本的使用协程调度采集任务，请合理配置采集参数!', 'm'))
 print(magic_msg('>>> 用餐愉快~', 'g'))
+print(magic_msg(''.center(50, '#'), 'w'))
 """############################################################"""
 
 # 赛区官网
