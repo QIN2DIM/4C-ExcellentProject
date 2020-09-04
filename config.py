@@ -254,6 +254,7 @@ CHROME_CODE_PATH = os.path.dirname(__file__) + '/MiddleWare/chromedriver.exe'
 
 # MTH离线网页文件的存储文件夹路径，默认./dataBase/BACKUP，若更改，请使用绝对路径
 BACKUP_OUT_PATH = os.path.join(ROOT_DATABASE, 'BACKUP')
+BACKUP_CASHED_FILE = [i for i in os.listdir(BACKUP_OUT_PATH) if '.mhtml' in i]
 
 
 def Println(entity=None):

@@ -116,8 +116,8 @@ class WebCopySpider(object):
             # 将《作品编号.mhtml》作为文件名
             file_name = target.split('=')[-1].strip() + '.mhtml'
 
-            # 扫描输出路径，若该文件已留下采集痕迹，则跳过采集，否则启动怕从程序
-            if file_name not in os.listdir(BACKUP_OUT_PATH):
+            # 扫描输出路径，若该文件已留下采集痕迹，则跳过采集，否则启动爬虫程序
+            if file_name not in BACKUP_CASHED_FILE:
                 # 合并文件输出路径
                 file_outPath = os.path.join(BACKUP_OUT_PATH, file_name)
                 try:
