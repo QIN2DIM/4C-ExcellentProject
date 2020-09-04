@@ -13,7 +13,7 @@ try:
     from bs4 import BeautifulSoup
     from requests.exceptions import *
     from gevent.queue import Queue
-
+    from retrying import retry
     from selenium.webdriver import Chrome, ChromeOptions
     from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
     from selenium.webdriver.support.wait import WebDriverWait

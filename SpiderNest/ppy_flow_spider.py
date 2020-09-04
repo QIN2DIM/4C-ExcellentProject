@@ -84,6 +84,7 @@ class WebCopySpider(object):
             now_ = '\n\n[{}]\n'.format(str(datetime.now()).split('.')[0])
             f.write(now_ + info)
 
+    @retry(wait_random_min=1000, wait_random_max=2000, stop_max_attempt_number=3)
     def get_page(self, target, file_name):
 
         # 接管Chrome
