@@ -1,25 +1,29 @@
-from gevent import monkey
-
-monkey.patch_all()
-
 import os
 import csv
-import time
 from datetime import datetime
 
 try:
+    from gevent import monkey
 
+    monkey.patch_all()
     import gevent
     import requests
+    from fake_useragent import UserAgent
     from urllib.parse import urlencode
     from bs4 import BeautifulSoup
     from requests.exceptions import *
     from gevent.queue import Queue
+
+    from selenium.webdriver import Chrome, ChromeOptions
+    from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+    from selenium.webdriver.support.wait import WebDriverWait
+    import selenium.webdriver.support.expected_conditions as EC
 except ModuleNotFoundError as e:
-    print('\n{}\n>>> 请手动安装清单中的第三方库\n{}'.format(
+    print('\n{}\n>>> 请手动安装清单中的第三方库 \n{}'.format(
         e,
         os.path.dirname(__file__) + '/config.py'
     ))
+    os.system('pip install -i https://pypi.tuna.tsinghua.edu.cn/simple gevent bs4 requests')
     exit(1)
 
 
@@ -181,7 +185,20 @@ def load_data_from_id_set(mode) -> list:
             return [i[1] for i in data]
 
 
-############################################################
+def INIT():
+    import tempfile
+    if 'fake_useragent_0.1.11.json' not in os.listdir(tempfile.gettempdir()):
+        os.system('copy {} {}'.format(
+            ROOT_DATABASE + '/fake_useragent_0.1.11.json',
+            tempfile.gettempdir() + '/fake_useragent_0.1.11.json'
+        ))
+
+
+INIT()
+print(magic_msg('>>> 欢迎使用中国大学生计算机设计大赛数据挖掘爬虫！', 'r'))
+print(magic_msg('>>> 该脚本的采集任务使用协程模式，请合理配置采集功率!', 'm'))
+print(magic_msg('>>> 用餐愉快~', 'g'))
+"""############################################################"""
 
 # 赛区官网
 home = 'http://2020.jsjds.com.cn'
@@ -217,7 +234,6 @@ comp_table_fp = version_control('fn', BASE_NAME='合成')
 # 脚本核心组件，请勿挪动删除
 COMP_DATABASE = ROOT_DATABASE + '/CNJSJ_BASE.csv'
 
-
 # 爬虫控件
 """############################################################################################"""
 SPIDER_HEADERS = {
@@ -232,6 +248,12 @@ USER_KEY = ''
 
 # 缓冲件，用于打印预览信息的容器
 VIEWER = {}
+
+# chromedriver.exe path ,若驱动没配置系统环境变量，请在此赋值绝对路径
+CHROME_CODE_PATH = ''
+
+# MTH离线网页文件的存储文件夹路径，默认./dataBase/BACKUP，若更改，请使用绝对路径
+BACKUP_OUT_PATH = os.path.join(ROOT_DATABASE, 'BACKUP')
 
 
 def Println(entity=None):
