@@ -2,9 +2,12 @@ import os
 import csv
 import webbrowser
 import json
-from config import comp_table_fp, Println, ROOT_DATABASE, title, POWER, version_control, COMP_DATABASE, magic_msg
+
 from SpiderNest.snsProj_spider import get_985, get_211
-from collections import *
+from collections import Counter
+
+from config import Println, ROOT_DATABASE, title, \
+    version_control, COMP_DATABASE, magic_msg, load_data_from_id_set
 
 # 摘要报告输出路径
 out_flow_path = ''
@@ -200,7 +203,7 @@ def run_crawl_to_capture_workData(work_id='', power: int = 30, ):
         comp_workData()
 
         # 打印预抓取信息
-        if work_id != '':
+        if isinstance(work_id, str):
             Println()
     finally:
         # 垃圾释放
@@ -210,3 +213,11 @@ def run_crawl_to_capture_workData(work_id='', power: int = 30, ):
 def run_crawl_to_backup_workData(work_id, power: int = 4):
     from SpiderNest.ppy_flow_spider import go_bbr_spider
     go_bbr_spider(work_target=work_id, power=power)
+
+
+def get_all_works_id() -> list:
+    """
+    获取所有在库作品编号，无表头
+    :return:
+    """
+    return load_data_from_id_set('spider_key')[1:]

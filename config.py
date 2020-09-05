@@ -214,15 +214,16 @@ ROOT_DATABASE = os.path.dirname(__file__) + '/dataBase'
 # 错误日志路径，记录采集异常并捕获链接
 log_fp = ROOT_DATABASE + '/error_log.txt'
 
-# id源表文件位置
+# id源表文件位置，请勿改动源文件
 id_fp = ROOT_DATABASE + '/id_set_01.csv'
 
-# 输出文件版本控制
+# 比赛名称
 base_name = '中国大学生计算机设计大赛'
 
 # 采集输出路径
 out_path = version_control('fn')
 
+# 合成表表头信息，请勿改动
 title = "uuid,work_id,work_level,work_class,work_name,school,player,tutor," \
         "作品简介,开源代码与组件使用情况说明,作品安装说明," \
         "作品效果图,设计思路,设计重点和难点,指导老师自评," \
@@ -237,9 +238,9 @@ COMP_DATABASE = ROOT_DATABASE + '/CNJSJ_BASE.csv'
 
 # 爬虫控件
 """############################################################################################"""
+
 SPIDER_HEADERS = {
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                  'Chrome/84.0.4147.135 Safari/537.36 '
+    'user-agent': UserAgent().random
 }
 # 采集功率
 POWER = 16

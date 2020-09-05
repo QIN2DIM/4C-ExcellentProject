@@ -62,3 +62,15 @@ Message: timeout: Timed out receiving message from renderer: 298.879
 http://2020.jsjds.com.cn/chaxun?keys=72921
 Message: timeout: Timed out receiving message from renderer: 299.091
   (Session info: headless chrome=84.0.4147.135)
+
+
+[2020-09-05 01:57:33]
+http://2020.jsjds.com.cn/chaxun?keys=76740
+Message: timeout: Timed out receiving message from renderer: 299.019
+  (Session info: headless chrome=84.0.4147.135)
+
+                    >>>【2】
+                    ERROR_KEY:http://2020.jsjds.com.cn/chaxun/?keys=69933
+
+                    ERROR_INFO:object of type 'NoneType' has no len()
+                    
