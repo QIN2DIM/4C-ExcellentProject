@@ -125,3 +125,4 @@ dmypy.json
 .pyre/
 *.mhtml
 dataBase/error_log.txt
+dataBase/中国大学生计算机设计大赛_合成_1.csv
