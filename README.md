@@ -1,4 +1,4 @@
-[语雀同步文档](https://www.yuque.com/docs/share/c056d958-0c22-482f-8a9f-7cd86d178ef2?#)|中文
+[语雀同步文档](https://www.yuque.com/docs/share/c056d958-0c22-482f-8a9f-7cd86d178ef2?#) **|** 中文
 
 > 国内部分地区局域网可能无法正常显示github插图，请跳转语雀同步文档
 
@@ -6,7 +6,7 @@
 
 CCCC-中国大学生计算机设计大赛 :scroll:**历史作品博物馆**:scroll:
 
-收集|展示|赏析|学习|输出
+收集**|**展示**|**赏析**|**学习**|**输出
 
 ## :crossed_swords: 写在最前
 
