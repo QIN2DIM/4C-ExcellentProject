@@ -1,20 +1,24 @@
+[语雀同步文档](https://www.yuque.com/docs/share/c056d958-0c22-482f-8a9f-7cd86d178ef2?#)|中文
+
+> 国内部分地区局域网可能无法正常显示github插图，请跳转语雀同步文档
+
 # C4-2020中国大学生计算机设计大赛_信息采集爬虫
 
-利用官网接口，以及公开数据，采集作品信息
-
-> 国内部分地区局域网可能无法正常显示本文图片，请跳转[语雀同步文档](https://www.yuque.com/docs/share/c056d958-0c22-482f-8a9f-7cd86d178ef2?#)
+CCCC-中国大学生计算机设计大赛 :scroll:**历史作品博物馆**:scroll:
 
 
 
-- 咳咳- -本人大二狗，有幸作为项目负责人参与了2020中国大学生计算机设计大赛，并拿下了大数据赛道的国一
-- 做这个小脚本的初衷也比较简单垂直~无意中发现赛区官网开了一个查询作品信息的接口，我随意检索了几个视觉设计方向的作品(嗯！麻麻问我为啥跪着查成绩)咳咳。。本科生能独立完成这样的作品，真是太震撼了！嗯我说的就是72862的华科小姐姐团队(捂脸)。。。
-- 咳咳- -第一次写README如此罗嗦，总而言之该脚本主要功能就是**采集作品信息**和**拷贝作品信息**，更新的中间件已具备反制嗅探的能力。脚本具体使用方法请往下看；希望各位也能挖到宝~
-- 我已经提前拷贝了一份官网数据库，15G左右的数据量，之后若C4-2020的接口关闭，我会重发一版指向RDS云存储的版本。
-- 然后就是该脚本可能涉及一些隐私吧- - 如果官方工作人员看到这个觉得不太妥，可以私聊我下架脚本(嗯！道歉是认真的！不过话说真会有人来用这个脚本吗233)
+## :crossed_swords: 写在最前
 
-[TOC]
+- :1st_place_medal:：咳咳- -本人大二狗，有幸作为项目负责人参与了2020中国大学生计算机设计大赛，并拿下了大数据赛道全国一等奖。
+- :kissing_heart:：做这个小脚本的初衷也比较简单垂直~无意中看到了某个设计方向的作品，感触很深:100:（本科生能独立完成这样的作品，真是太震撼了！嗯我说的就是“红楼梦信息交互设计”的华科小姐姐团队，真正的面向薪资编程！）
+- :badminton:：于是便有了一个**收藏并展示该类比赛优秀作品**的想法，于是本人点开官网后发现最新的作品展示还要追溯到2015年-……行吧那就撸起袖子自己写了一个自动化采集程序，该程序会自动化采集作品数据，并生成永久访问链接，**展示的信息会经过数据脱敏，仅放出项目idea以及作品申报信息，供大家考古学习**（除非作者自己写出来了。。）；那必然~如果发现自己的idea有人已经实现过了，成绩还不错，那就避免雷同咯~
+- :rocket:：咳咳- -第一次写自述如此罗嗦，总而言之该脚本主要功能就是**采集作品信息**和**拷贝作品信息**。我会在均衡程序的鲁棒性后，引入**垂搜引擎**，帮助使用者秒搜`同质idea`以及`优秀参赛作品`
+- :tea:：最终的作品展示方式，我会慎重考虑。如果官方工作人员觉得不太妥，可以私聊本人喝茶（嗯！道歉是认真的！)，如果觉得本项目有望吸引更多的年轻人参赛施展才智，提高竞赛的知名度与含金量~可以私聊本人喝咖啡（咳咳..）
 
-## Quick Start
+
+
+## :carousel_horse: Quick Start
 
 进入`main.py`,按照说明书合理调用`API` ，运行程序即可调度爬虫采集数据。
 
@@ -81,7 +85,7 @@ if __name__ == '__main__':
 
 ![20200629_155209](https://i.loli.net/2020/09/01/MmYqsBRbPEZglv2.gif)
 
-## API
+## :smirk:API
 
 在从`MiddleWare`中导入`app`，即可调用脚本功能，别忘了调用`config`配置文件设置全局变量~
 
@@ -237,54 +241,40 @@ def load_data_from_id_set(mode) -> list:
         reader = csv.reader(f)
         data = [i for i in reader]
         if mode == 'spider_key':
-            return [i[1] for i in data]
+            # 清洗数据
+            return [i[1] for i in data if i[1] != 'N/A']
 ```
 
 - 食用方法
 
 ```python
-from config import load_data_from_id_set
+from MiddleWare import app
 
 if __name__ == '__main__':
-    id_flow: list = load_data_from_id_set(mode='spider_key')
-    print(id_flow)
+    # 返回无表头 id 列表
+    id_flow: list = app.get_all_works_id()
+    # 数据预览
     print('id池大小：{}'.format(id_flow.__len__()))
 ```
 
-
-
-## 注意事项
+## :small_red_triangle: 注意事项
 
 - 工程文件中的`/dataBase`目录下存放了脚本核心BASE文件，请勿随意挪动或删除文件，否则会出大问题！
 - `config.py`中可以自己调整的参数并不多，请勿随意改动其中数值，否则也会出大问题~
 
 
 
-## 文档树
+## :loudspeaker: 更新日志
 
-```
-中国大学生计算机设计大赛_抓取
- ├── dataBase
- │   ├── BACKUP
- │   ├── CNJSJ_BASE.csv
- │   ├── error_log.txt
- │   ├── id_pool.xlsx
- │   ├── id_set_01.csv
- │   ├── PSAR
- │   └── TPTDP
- ├── MiddleWare
- │   ├── app.py
- │   ├── cmp_data.py
- │   ├── raw_data_load.py
- │   └── __pycache__
- ├── SpiderNest
- │   ├── cnjsj_spider.py
- │   ├── ppy_flow_spider.py
- │   ├── snsProj_spider.py
- │   └── __pycache__
- ├── config.py
- ├── LICENSE
- ├── main.py
- ├── README.md
- └── requirements.txt
-```
+- **2020.09.06**
+  1. 已将所有`2020-MTH作品申报信息`离线封装
+  2. 将采集功能都封装进`app.py`里，所有功能都可通过该模块调用
+  3. 添加语雀同步文档，解决部分地区图文显示异常的问题
+  4. 项目除虫，增加了垃圾回收机制
+
+## :chart_with_upwards_trend: TODO
+
+- [ ] 搭建类BLOG前端，开放接口映射优秀作品文件
+- [ ] 服务器部署
+- [ ] 引入鲁棒均衡模组
+- [ ] 添加垂搜引擎，提供API接口
