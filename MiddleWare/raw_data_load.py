@@ -13,20 +13,22 @@ def load_id_pool():
 
                 writer.writerow([key, ] + flow)
 
+    # 要抽取的源表，比如成绩排名
     fp = '../dataBase/id_pool.xlsx'
 
-    # cont page∈[2, 172]
+    # cont page∈[x, y] x:开始有排名的table，y:结束页table
     page_range = [2, 172]
-    # 数据流初始化
+
+    # 初始化
     data_flow = {}
     count = 0
+
     # 创建对象
     wb = load_workbook(fp, read_only=True)
 
     for page in range(page_range[0], page_range[-1] + 1):
         ws_name = 'Table {}'.format(page)
         ws = wb[ws_name]
-        # print('load data : {}/173_{}'.format(ws_name, count))
         for row in ws.rows:
             data = []
             for cell in row:

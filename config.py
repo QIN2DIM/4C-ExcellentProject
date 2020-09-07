@@ -185,6 +185,31 @@ def load_data_from_id_set(mode) -> list:
             return [i[1] for i in data if i[1] != 'N/A']
 
 
+# 后台打印函数
+def Println(entity=None):
+    """
+
+    :param entity: 预览实体
+    :return:
+    """
+    global VIEWER
+
+    # 不传参直接调用则打印实体
+    if entity is None:
+        entity = {}
+        print('\n')
+        for i in VIEWER.items():
+            print(i)
+        print(magic_msg('>>> summary:{}个采集结果 '.format(VIEWER.keys().__len__()), 'c'))
+
+    # 传参调用则填充实体
+    elif isinstance(entity, dict) and entity:
+        VIEWER.update(
+            {entity['作品编号'].split('=')[-1]: entity}
+        )
+
+
+# 脚本环境初始化
 def INIT_USER_AGENT():
     import tempfile
     if 'fake_useragent_0.1.11.json' not in os.listdir(tempfile.gettempdir()):
@@ -208,7 +233,7 @@ home = 'http://2020.jsjds.com.cn'
 # demo_url = 'http://2020.jsjds.com.cn/chaxun?keys=75191'
 demo_url = 'http://2020.jsjds.com.cn/chaxun?'
 
-# 数据库根目录
+# 数据库根目录,请勿修改
 ROOT_DATABASE = os.path.dirname(__file__) + '/dataBase'
 
 # 错误日志路径，记录采集异常并捕获链接
@@ -236,47 +261,27 @@ comp_table_fp = version_control('fn', BASE_NAME='合成')
 # 脚本核心组件，请勿挪动删除
 COMP_DATABASE = ROOT_DATABASE + '/CNJSJ_BASE.csv'
 
-# 爬虫控件
+# 爬虫控件全局参数
 """############################################################################################"""
-
+# 请求头
 SPIDER_HEADERS = {
     'user-agent': UserAgent().random
 }
+
 # 采集功率
-POWER = 16
+POWER = 10
 
 # 作品编号，可为list，也可str，当不指定时置为''，此时会开启盲采
+# 当前版本已弃用该变量，在新版特性中会在全局配置文件中启用该变量传递参数
 USER_KEY = ''
 
-# 缓冲件，用于打印预览信息的容器
+# 缓冲件，后台调试容器
 VIEWER = {}
 
-# chromedriver.exe path ,若驱动没配置系统环境变量，请在此赋值绝对路径
+# chromedriver.exe path ,当前路径已指向默认工程驱动
+# 若要使用自己的驱动(已配置环境变量),给变量赋值空字符串
 CHROME_CODE_PATH = os.path.dirname(__file__) + '/MiddleWare/chromedriver.exe'
 
-# MTH离线网页文件的存储文件夹路径，默认./dataBase/BACKUP，若更改，请使用绝对路径
+# :BACKUP_OUT_PATH:MTH离线网页文件的存储文件夹路径，默认./dataBase/BACKUP，若更改，请使用绝对路径
 BACKUP_OUT_PATH = os.path.join(ROOT_DATABASE, 'BACKUP')
 BACKUP_CASHED_FILE = [i for i in os.listdir(BACKUP_OUT_PATH) if '.mhtml' in i]
-
-
-def Println(entity=None):
-    """
-
-    :param entity: 预览实体
-    :return:
-    """
-    global VIEWER
-
-    # 不传参直接调用则打印实体
-    if entity is None:
-        entity = {}
-        print('\n')
-        for i in VIEWER.items():
-            print(i)
-        print(magic_msg('>>> summary:{}个采集结果 '.format(VIEWER.keys().__len__()), 'c'))
-
-    # 传参调用则填充实体
-    elif isinstance(entity, dict) and entity:
-        VIEWER.update(
-            {entity['作品编号'].split('=')[-1]: entity}
-        )
