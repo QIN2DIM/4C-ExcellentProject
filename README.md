@@ -1,4 +1,4 @@
-[语雀同步文档](https://www.yuque.com/docs/share/c056d958-0c22-482f-8a9f-7cd86d178ef2?#) **|** 中文
+[语雀同步文档](https://www.yuque.com/docs/share/c056d958-0c22-482f-8a9f-7cd86d178ef2?#) **|** [中文](https://github.com/QIN2DIM/C4-WorksHistoryMuseum)
 
 > 国内部分地区局域网可能无法正常显示github插图，请跳转语雀同步文档
 
