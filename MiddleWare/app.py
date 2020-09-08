@@ -18,6 +18,7 @@ class GUI_PANEL(object):
         self.home = 'http://2020.jsjds.com.cn/chaxun?keys={}'
 
         self.data = self.load_data()
+        self.bits = dict(zip(title, list(range(title.__len__()))))
 
         self.sns_211 = get_211()
         self.sns_985 = get_985()
@@ -43,15 +44,22 @@ class GUI_PANEL(object):
             reader = csv.reader(f)
             return [i for i in reader][1:]
 
-    def find_works_by_id(self, key: str, goto=False) -> dict:
+    @staticmethod
+    def println_summary(DOCKER):
+        for x in DOCKER:
+            print(x)
+
+        print(magic_msg('>>> summary:{}'.format(DOCKER.__len__()), 'r'))
+
+    def find_works_by_id(self, work_id: str, goto=False) -> dict:
         """
         根据作品编号跳转网页,不传参则弹出panel手动输入
         :param goto: 若为True则根据id打开网页
-        :param key: 作品编号
+        :param work_id: 作品编号
         :return:
         """
         for item in self.data:
-            if key == item[1]:
+            if work_id in item[1]:
                 DOCKER = dict(zip(title, item))
                 with open(ROOT_DATABASE + '/PSAR/ASH.json', 'w+', encoding='utf-8') as f:
                     json.dump(DOCKER, f, ensure_ascii=False, indent=4)
@@ -61,36 +69,109 @@ class GUI_PANEL(object):
                     webbrowser.open(item[0])
                 return DOCKER
 
-    def find_works_by_level(self, level: str or bool, class_: str or bool) -> list or bool:
+    def find_works_by_level(self, level: str or bool, work_class: str or bool) -> list or bool:
         """
         根据作品登记筛选数据,不兼容模糊匹配
-        :param class_:
+        :param work_class:
         :param level: 作品奖级,'一等奖','二等奖','三等奖','优秀奖',分别代表一等奖~三等奖以及优秀奖
         :return:
         """
         DOCKER = []
 
-        if level != '' and class_ != '':
+        if level != '' and work_class != '':
             for item in self.data:
-                if item[2] == level and class_ in item[3]:
+                if item[2] == level and work_class in item[3]:
                     DOCKER.append(list(item[:6]))
-        elif (level == '' or level is False) and class_ != '':
+        elif (level == '' or level is False) and work_class != '':
             for item in self.data:
-                if class_ in item[3]:
+                if work_class in item[3]:
                     DOCKER.append(list(item[:6]))
-        elif level != '' and (class_ == '' or class_ is False):
+        elif level != '' and (work_class == '' or work_class is False):
             for item in self.data:
                 if item[2] == level:
                     DOCKER.append(list(item[:6]))
         else:
             return False
 
-        for x in DOCKER:
-            print(x)
-
-        print(magic_msg('>>> summary:{}'.format(DOCKER.__len__()), 'r'))
-        # print(magic_msg('>>> {}'.format(list(Counter([i[-1] for i in DOCKER]).items())), 'm'))
+        self.println_summary(DOCKER)
         return DOCKER
+
+    def find_works_by_title(self, work_name: str, work_class: str = ''):
+
+        if work_class != '':
+            DOCKER = [x[:8] for x in self.data if work_name in x[4] and work_class in x[3]]
+        else:
+            DOCKER = [x[:8] for x in self.data if work_name in x[4]]
+
+        self.println_summary(DOCKER)
+        return DOCKER
+
+    def find_works_by_player(self, player: str, school: str = ''):
+
+        if school != '':
+            DOCKER = [x[:8] for x in self.data if player in x[6] and school in x[5]]
+        else:
+            DOCKER = [x[:8] for x in self.data if player in x[6]]
+
+        self.println_summary(DOCKER)
+        return DOCKER
+
+    def find_works_by_tutor(self, tutor: str, school: str = ''):
+
+        if school != '':
+            DOCKER = [x[:8] for x in self.data if tutor in x[7] and school in x[5]]
+        else:
+            DOCKER = [x[:8] for x in self.data if tutor in x[7]]
+
+        self.println_summary(DOCKER)
+        return DOCKER
+
+    def find_works(self, key, border=8, **kwargs):
+
+        # 全文模糊匹配
+        DOCKER = [x[:border] for x in self.data if key in ''.join(x)]
+
+        work_id = kwargs.get('attrs').get('work_id')
+        work_level = self.level_convert(kwargs.get('attrs').get('level'))
+        work_class = kwargs.get('attrs').get('class_')
+        work_name = kwargs.get('attrs').get('name')
+        school: str = kwargs.get('attrs').get('school')
+        player = kwargs.get('attrs').get('player')
+        tutor = kwargs.get('attrs').get('tutor')
+
+        if school:
+            DOCKER = [x for x in DOCKER if school in x[self.bits['school']]]
+
+        if work_class:
+            DOCKER = [x for x in DOCKER if work_class in x[self.bits['work_class']]]
+
+        if work_level:
+            DOCKER = [x for x in DOCKER if work_level == x[self.bits['work_level']]]
+
+        if work_name:
+            DOCKER = [x for x in DOCKER if work_name in x[self.bits['work_name']]]
+
+        if player:
+            DOCKER = [x for x in DOCKER if player in x[self.bits['player']]]
+
+        elif tutor:
+            DOCKER = [x for x in DOCKER if tutor in x[self.bits['tutor']]]
+
+        self.println_summary(DOCKER)
+
+        return DOCKER
+
+    @staticmethod
+    def level_convert(level: str):
+        if level is None:
+            return None
+
+        if '1' in level:
+            return '一等奖'
+        elif '2' in level:
+            return '二等奖'
+        elif '3' in level:
+            return '三等奖'
 
     def get_PSAR(self, school_name, save=False):
         global out_flow_path
@@ -129,7 +210,6 @@ class GUI_PANEL(object):
             return '>>> 该模块不兼容模糊匹配,请输入学校全称！'
 
     def get_summary(self, ):
-
         print('>>> 共{}所高校入围决赛,总计{}件作品入围决赛'.format(
             set(self.school_name).__len__(),
             self.school_name.__len__()
@@ -154,17 +234,51 @@ class GUI_PANEL(object):
 
 
 def find_works_by_level(level: str = '', class_: str = ''):
-    return GUI_PANEL().find_works_by_level(level=level, class_=class_)
+    return GUI_PANEL().find_works_by_level(level=level, work_class=class_)
 
 
 def find_works_by_id(key, goto=True):
     try:
-        msg = GUI_PANEL().find_works_by_id(key=key, goto=goto)
-        msg.items()
-        return msg
+        if isinstance(key, str):
+            msg = GUI_PANEL().find_works_by_id(work_id=key, goto=goto)
+            msg.items()
+            return msg
+        elif isinstance(key, list):
+            assert key.__len__() <= 5, 'assert 请控制自启网页数量小于预设值'
+            for id_ in key:
+                GUI_PANEL().find_works_by_id(work_id=id_, goto=goto)
+
     except AttributeError:
         print('>>> 作品编号不存在!')
         exit(1)
+
+
+def find_works_by_title(work_name: str, class_: str = '') -> list:
+    return GUI_PANEL().find_works_by_title(work_name=work_name, work_class=class_)
+
+
+def find_works_by_player(player_name: str, school_name: str = '') -> list:
+    return GUI_PANEL().find_works_by_player(player=player_name, school=school_name)
+
+
+def find_works_by_tutor(tutor: str, school_name: str = '') -> list:
+    pass
+
+
+def find_works(any_key: str = '', work_id: str = '', attrs=None) -> list:
+    """
+    支持任意关键字的全文匹配
+    :param work_id: 全局唯一的作品编号
+    :param any_key: 任意关键字
+    :param attrs: 传入字典。{'关键字':"匹配的字符串"}，如 {‘school’:'北京大学'}
+    关键字有这些: level（奖级），class_（类别），name（作品名），school（高校），player（成员），tutor（指导老师）
+    当传入奖级时，使用str(1),str(2),str(3) 分别表示一二三等奖，其余关键字均支持模糊匹配
+    :return:
+    """
+    if attrs is None:
+        attrs = {}
+
+    return GUI_PANEL().find_works(key=any_key, attrs=attrs)
 
 
 def get_summary():
@@ -205,6 +319,9 @@ def run_crawl_to_capture_workData(work_id='', power: int = 30, ):
         # 打印预抓取信息
         if isinstance(work_id, str):
             Println()
+        elif isinstance(work_id, list):
+            Println()
+
     finally:
         # 垃圾释放
         os.remove(version_control('fn'))

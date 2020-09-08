@@ -165,7 +165,7 @@ def go_bbr_spider(work_target, power: int):
         # 功率限制
         if power > work_target.__len__():
             power = work_target.__len__()
-            print(magic_msg('>>> 监测到您设置的协程功率较大，请确保网络通通畅，否则采集可能出现异常！', 'r'))
+            print(magic_msg('>>> 系统检测到当前采集功率过高，请确保网络通畅，否则采集行为可能出现异常！', 'r'))
 
         # 开启协程任务
         task_list = []

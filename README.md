@@ -185,8 +185,8 @@ from MiddleWare import app
 from config import *
 
 if __name__ == '__main__':
-    # app.find_works_by_level(level='一等奖', class_='大数据')
-    # app.find_works_by_level(level='', class_='人工智能')
+    # app.find_works_by_level(level='一等奖', work_class='大数据')
+    # app.find_works_by_level(level='', work_class='人工智能')
     app.find_works_by_level(level='一等奖', class_='')
 ```
 

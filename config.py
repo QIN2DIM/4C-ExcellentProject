@@ -119,13 +119,21 @@ def magic_msg(text: str, text_color, show_style='default', bk_color='default'):
 # 版本控制
 def version_control(mode='', BASE_NAME='国赛', INIT=True) -> str:
     """
-    获取当前最新版本的输出文件
+
+    :param mode: str 调用模式
+        'fn': 获得最新版本文件的绝对路径
+        'new':获得更新版本的文件绝对路径
+        'num':获得最新版本文件的版本号
+    :param BASE_NAME: str 文件名关键词字段
+        系统文件强制关键词为”国赛“ ”合成“，分别表示爬虫采集的文件，以及信息表合成文件
+    :param INIT: 系统迭代参数，请勿改动
     :return:
     """
 
     try:
         # 取出对应BASE_NAME的最新版本文件
-        out_dir_version = sorted([i for i in os.listdir(ROOT_DATABASE) if BASE_NAME in i])[-1]
+        out_dir_version = '{}_{}_{}.csv'.format(base_name, BASE_NAME, sorted(
+            [int(i.split('.csv')[0].split('_')[-1]) for i in os.listdir(ROOT_DATABASE) if BASE_NAME in i])[-1])
     except IndexError:
         # 当目录未初始化或不存在对应BASE_NAME文件，则初始化文件名，
         # 文件命名严格按照如下范式
@@ -167,11 +175,11 @@ def version_control(mode='', BASE_NAME='国赛', INIT=True) -> str:
 # 载入id_fp数据集
 def load_data_from_id_set(mode) -> list:
     """
-    data_set = title
+
     :param mode: 截取模式,
-                spider_key : 联采
-                str:works_id : 该作品编号对应的数据
-                list:works_id :
+        str: "spider_key" 读取所有id
+        str: works_id: 传入单个作品编号
+        list: works_id: 传入包含多个作品编号的列表
     :return:返回表头+数据，使用切片[1:]截出数据集
     """
 
@@ -186,7 +194,7 @@ def load_data_from_id_set(mode) -> list:
 
 
 # 后台打印函数
-def Println(entity=None):
+def Println(entity=None, ):
     """
 
     :param entity: 预览实体
@@ -198,8 +206,12 @@ def Println(entity=None):
     if entity is None:
         entity = {}
         print('\n')
-        for i in VIEWER.items():
-            print(i)
+        print(magic_msg(''.center(100, '#'), 'w'))
+        for v, k in list(VIEWER.items()):
+            print('\n作品编号:{}'.format(k['作品编号']))
+            print('作品名称:{}'.format(k['作品名称']))
+            print('作品分类:{}'.format(k['作品分类']))
+
         print(magic_msg('>>> summary:{}个采集结果 '.format(VIEWER.keys().__len__()), 'c'))
 
     # 传参调用则填充实体
@@ -211,6 +223,10 @@ def Println(entity=None):
 
 # 脚本环境初始化
 def INIT_USER_AGENT():
+    """
+    将伪装请求头文件写入系统缓存，不执行该初始化步骤 fake-useragent库将发生致命错误
+    :return:
+    """
     import tempfile
     if 'fake_useragent_0.1.11.json' not in os.listdir(tempfile.gettempdir()):
         os.system('copy {} {}'.format(
@@ -220,6 +236,7 @@ def INIT_USER_AGENT():
 
 
 INIT_USER_AGENT()
+print(magic_msg(''.center(100, '#'), 'w'))
 print(magic_msg('>>> 欢迎使用|=< C4-2020中国大学生计算机设计大赛_数据采集爬虫(C4DmSpider) >=|', 'r'))
 print(magic_msg('>>> 该脚本使用协程调度采集任务，请合理配置采集参数!', 'm'))
 print(magic_msg('>>> 用餐愉快~', 'g'))
@@ -278,10 +295,13 @@ USER_KEY = ''
 # 缓冲件，后台调试容器
 VIEWER = {}
 
-# chromedriver.exe path ,当前路径已指向默认工程驱动
-# 若要使用自己的驱动(已配置环境变量),给变量赋值空字符串
+# chromedriver.exe 的存放路径 ,当前路径已指向默认工程驱动
+# 若要使用自己的驱动,给变量赋值空字符串(已配置环境变量)或手动指定绝对路径
 CHROME_CODE_PATH = os.path.dirname(__file__) + '/MiddleWare/chromedriver.exe'
 
-# :BACKUP_OUT_PATH:MTH离线网页文件的存储文件夹路径，默认./dataBase/BACKUP，若更改，请使用绝对路径
+# :BACKUP_OUT_PATH:MTH离线网页文件的存储文件夹路径
+#  默认在./dataBase/BACKUP，若要更改，请使用绝对路径
 BACKUP_OUT_PATH = os.path.join(ROOT_DATABASE, 'BACKUP')
 BACKUP_CASHED_FILE = [i for i in os.listdir(BACKUP_OUT_PATH) if '.mhtml' in i]
+
+
