@@ -3,10 +3,9 @@ import csv
 from datetime import datetime
 
 try:
-    from gevent import monkey
 
-    monkey.patch_all()
     import gevent
+
     import requests
     from fake_useragent import UserAgent
     from urllib.parse import urlencode
@@ -303,5 +302,3 @@ CHROME_CODE_PATH = os.path.dirname(__file__) + '/MiddleWare/chromedriver.exe'
 #  默认在./dataBase/BACKUP，若要更改，请使用绝对路径
 BACKUP_OUT_PATH = os.path.join(ROOT_DATABASE, 'BACKUP')
 BACKUP_CASHED_FILE = [i for i in os.listdir(BACKUP_OUT_PATH) if '.mhtml' in i]
-
-

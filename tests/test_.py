@@ -1,5 +1,4 @@
 from MiddleWare import app
-from config import *
 import random
 
 
