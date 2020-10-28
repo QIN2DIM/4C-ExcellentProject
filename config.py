@@ -23,7 +23,6 @@ except ModuleNotFoundError as e:
         os.path.dirname(__file__) + '/config.py'
     ))
     os.system('pip install -i https://pypi.tuna.tsinghua.edu.cn/simple gevent bs4 requests')
-    exit(1)
 
 
 # 文本装饰器
