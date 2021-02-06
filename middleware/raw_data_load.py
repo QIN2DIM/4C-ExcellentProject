@@ -1,20 +1,18 @@
-
 # 该数据抽取脚本仅供数据初始化用途，请勿随意改动
 def load_id_pool():
     """从id_pool.xlsx中清洗出id_set_01.csv"""
     from openpyxl import load_workbook
     import csv
 
-    def save_info_pool(outFlow: dict):
-        with open('../dataBase/id_set_02.csv', 'w', encoding='utf-8', newline='')as f:
+    def save_info_pool(out_flow: dict):
+        with open('../database/id_set_02.csv', 'w', encoding='utf-8', newline='')as f:
             writer = csv.writer(f)
             writer.writerow(['uuid', 'work_id', 'work_level', 'work_name', 'school', 'player', 'tutor'])
-            for key, flow in outFlow.items():
-
+            for key, flow in out_flow.items():
                 writer.writerow([key, ] + flow)
 
     # 要抽取的源表，比如成绩排名
-    fp = '../dataBase/id_pool.xlsx'
+    fp = '../database/id_pool.xlsx'
 
     # cont page∈[x, y] x:开始有排名的table，y:结束页table
     page_range = [2, 172]

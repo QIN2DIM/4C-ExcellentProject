@@ -1,24 +1,23 @@
-import os
 import csv
-import webbrowser
 import json
-
-from SpiderNest.snsProj_spider import get_985, get_211
+import os
+import webbrowser
 from collections import Counter
 
-from config import Println, ROOT_DATABASE, title, \
+from spiders.sns_project import get_985, get_211
+from config import println, ROOT_DIR_DATABASE, TITLE, \
     version_control, COMP_DATABASE, magic_msg, load_data_from_id_set
 
 # 摘要报告输出路径
 out_flow_path = ''
 
 
-class GUI_PANEL(object):
+class SystemPanel(object):
     def __init__(self):
         self.home = 'http://2020.jsjds.com.cn/chaxun?keys={}'
 
         self.data = self.load_data()
-        self.bits = dict(zip(title, list(range(title.__len__()))))
+        self.bits = dict(zip(TITLE, list(range(TITLE.__len__()))))
 
         self.sns_211 = get_211()
         self.sns_985 = get_985()
@@ -45,11 +44,11 @@ class GUI_PANEL(object):
             return [i for i in reader][1:]
 
     @staticmethod
-    def println_summary(DOCKER):
-        for x in DOCKER:
+    def println_summary(docker):
+        for x in docker:
             print(x)
 
-        print(magic_msg('>>> summary:{}'.format(DOCKER.__len__()), 'r'))
+        print(magic_msg('>>> summary:{}'.format(docker.__len__()), 'r'))
 
     def find_works_by_id(self, work_id: str, goto=False) -> dict:
         """
@@ -60,14 +59,14 @@ class GUI_PANEL(object):
         """
         for item in self.data:
             if work_id in item[1]:
-                DOCKER = dict(zip(title, item))
-                with open(ROOT_DATABASE + '/PSAR/ASH.json', 'w+', encoding='utf-8') as f:
-                    json.dump(DOCKER, f, ensure_ascii=False, indent=4)
+                docker = dict(zip(TITLE, item))
+                with open(ROOT_DIR_DATABASE + '/psar/ASH.json', 'w+', encoding='utf-8') as f:
+                    json.dump(docker, f, ensure_ascii=False, indent=4)
 
                 # goto website
                 if goto:
                     webbrowser.open(item[0])
-                return DOCKER
+                return docker
 
     def find_works_by_level(self, level: str or bool, work_class: str or bool) -> list or bool:
         """
@@ -76,62 +75,62 @@ class GUI_PANEL(object):
         :param level: 作品奖级,'一等奖','二等奖','三等奖','优秀奖',分别代表一等奖~三等奖以及优秀奖
         :return:
         """
-        DOCKER = []
+        docker = []
 
         if level != '' and work_class != '':
             for item in self.data:
                 if item[2] == level and work_class in item[3]:
-                    DOCKER.append(list(item[:6]))
+                    docker.append(list(item[:6]))
         elif (level == '' or level is False) and work_class != '':
             for item in self.data:
                 if work_class in item[3]:
-                    DOCKER.append(list(item[:6]))
+                    docker.append(list(item[:6]))
         elif level != '' and (work_class == '' or work_class is False):
             for item in self.data:
                 if item[2] == level:
-                    DOCKER.append(list(item[:6]))
+                    docker.append(list(item[:6]))
         else:
             return False
 
-        self.println_summary(DOCKER)
-        return DOCKER
+        self.println_summary(docker)
+        return docker
 
     def find_works_by_title(self, work_name: str, work_class: str = ''):
 
         if work_class != '':
-            DOCKER = [x[:8] for x in self.data if work_name in x[4] and work_class in x[3]]
+            docker = [x[:8] for x in self.data if work_name in x[4] and work_class in x[3]]
         else:
-            DOCKER = [x[:8] for x in self.data if work_name in x[4]]
+            docker = [x[:8] for x in self.data if work_name in x[4]]
 
-        self.println_summary(DOCKER)
-        return DOCKER
+        self.println_summary(docker)
+        return docker
 
     def find_works_by_player(self, player: str, school: str = ''):
 
         if school != '':
-            DOCKER = [x[:8] for x in self.data if player in x[6] and school in x[5]]
+            docker = [x[:8] for x in self.data if player in x[6] and school in x[5]]
         else:
-            DOCKER = [x[:8] for x in self.data if player in x[6]]
+            docker = [x[:8] for x in self.data if player in x[6]]
 
-        self.println_summary(DOCKER)
-        return DOCKER
+        self.println_summary(docker)
+        return docker
 
     def find_works_by_tutor(self, tutor: str, school: str = ''):
 
         if school != '':
-            DOCKER = [x[:8] for x in self.data if tutor in x[7] and school in x[5]]
+            docker = [x[:8] for x in self.data if tutor in x[7] and school in x[5]]
         else:
-            DOCKER = [x[:8] for x in self.data if tutor in x[7]]
+            docker = [x[:8] for x in self.data if tutor in x[7]]
 
-        self.println_summary(DOCKER)
-        return DOCKER
+        self.println_summary(docker)
+        return docker
 
     def find_works(self, key, border=8, **kwargs):
 
         # 全文模糊匹配
-        DOCKER = [x[:border] for x in self.data if key in ''.join(x)]
+        docker = [x[:border] for x in self.data if key in ''.join(x)]
 
-        work_id = kwargs.get('attrs').get('work_id')
+        # work_id = kwargs.get('attrs').get('work_id')
         work_level = self.level_convert(kwargs.get('attrs').get('level'))
         work_class = kwargs.get('attrs').get('class_')
         work_name = kwargs.get('attrs').get('name')
@@ -140,26 +139,26 @@ class GUI_PANEL(object):
         tutor = kwargs.get('attrs').get('tutor')
 
         if school:
-            DOCKER = [x for x in DOCKER if school in x[self.bits['school']]]
+            docker = [x for x in docker if school in x[self.bits['school']]]
 
         if work_class:
-            DOCKER = [x for x in DOCKER if work_class in x[self.bits['work_class']]]
+            docker = [x for x in docker if work_class in x[self.bits['work_class']]]
 
         if work_level:
-            DOCKER = [x for x in DOCKER if work_level == x[self.bits['work_level']]]
+            docker = [x for x in docker if work_level == x[self.bits['work_level']]]
 
         if work_name:
-            DOCKER = [x for x in DOCKER if work_name in x[self.bits['work_name']]]
+            docker = [x for x in docker if work_name in x[self.bits['work_name']]]
 
         if player:
-            DOCKER = [x for x in DOCKER if player in x[self.bits['player']]]
+            docker = [x for x in docker if player in x[self.bits['player']]]
 
         elif tutor:
-            DOCKER = [x for x in DOCKER if tutor in x[self.bits['tutor']]]
+            docker = [x for x in docker if tutor in x[self.bits['tutor']]]
 
-        self.println_summary(DOCKER)
+        self.println_summary(docker)
 
-        return DOCKER
+        return docker
 
     @staticmethod
     def level_convert(level: str):
@@ -173,39 +172,39 @@ class GUI_PANEL(object):
         elif '3' in level:
             return '三等奖'
 
-    def get_PSAR(self, school_name, save=False):
+    def get_psar(self, school_name, save=False):
         global out_flow_path
         score_list = dict(zip(set(self.school_name), [[0, 0, 0]] * set(self.school_name).__len__()))
 
         if school_name in self.school_name:
 
-            myLevel = ['一等奖', '二等奖', '三等奖']
+            my_level = ['一等奖', '二等奖', '三等奖']
             id_docker_1 = [[], [], []]
             for t in zip(self.school_name, self.work_uuid, self.work_name, self.level_group):
                 if school_name == t[0]:
-                    if myLevel[0] == t[-1]:
+                    if my_level[0] == t[-1]:
                         score_list[t[0]][0] += 1
                         id_docker_1[0].append({t[1]: t[2]})
-                    elif myLevel[1] == t[-1]:
+                    elif my_level[1] == t[-1]:
                         score_list[t[0]][1] += 1
                         id_docker_1[1].append({t[1]: t[2]})
-                    elif myLevel[2] == t[-1]:
+                    elif my_level[2] == t[-1]:
                         score_list[t[0]][2] += 1
                         id_docker_1[2].append({t[1]: t[2]})
 
-            DOCKER = {
+            docker = {
                 school_name: {
-                    '成果概要': dict(zip(myLevel, score_list[school_name])),
-                    '作品细节': dict(zip(myLevel, id_docker_1))
+                    '成果概要': dict(zip(my_level, score_list[school_name])),
+                    '作品细节': dict(zip(my_level, id_docker_1))
                 }
             }
 
             if save:
-                out_flow_path = ROOT_DATABASE + '/PSAR/{}_分析报告.json'.format(school_name)
+                out_flow_path = ROOT_DIR_DATABASE + '/psar/{}_分析报告.json'.format(school_name)
                 with open(out_flow_path, 'w+', encoding='utf-8') as f:
-                    json.dump(DOCKER, f, ensure_ascii=False, indent=4)
+                    json.dump(docker, f, ensure_ascii=False, indent=4)
 
-            return DOCKER
+            return docker
         else:
             return '>>> 该模块不兼容模糊匹配,请输入学校全称！'
 
@@ -234,19 +233,19 @@ class GUI_PANEL(object):
 
 
 def find_works_by_level(level: str = '', class_: str = ''):
-    return GUI_PANEL().find_works_by_level(level=level, work_class=class_)
+    return SystemPanel().find_works_by_level(level=level, work_class=class_)
 
 
 def find_works_by_id(key, goto=True):
     try:
         if isinstance(key, str):
-            msg = GUI_PANEL().find_works_by_id(work_id=key, goto=goto)
+            msg = SystemPanel().find_works_by_id(work_id=key, goto=goto)
             msg.items()
             return msg
         elif isinstance(key, list):
             assert key.__len__() <= 5, 'assert 请控制自启网页数量小于预设值'
             for id_ in key:
-                GUI_PANEL().find_works_by_id(work_id=id_, goto=goto)
+                SystemPanel().find_works_by_id(work_id=id_, goto=goto)
 
     except AttributeError:
         print('>>> 作品编号不存在!')
@@ -254,11 +253,11 @@ def find_works_by_id(key, goto=True):
 
 
 def find_works_by_title(work_name: str, class_: str = '') -> list:
-    return GUI_PANEL().find_works_by_title(work_name=work_name, work_class=class_)
+    return SystemPanel().find_works_by_title(work_name=work_name, work_class=class_)
 
 
 def find_works_by_player(player_name: str, school_name: str = '') -> list:
-    return GUI_PANEL().find_works_by_player(player=player_name, school=school_name)
+    return SystemPanel().find_works_by_player(player=player_name, school=school_name)
 
 
 def find_works_by_tutor(tutor: str, school_name: str = '') -> list:
@@ -278,35 +277,35 @@ def find_works(any_key: str = '', work_id: str = '', attrs=None) -> list:
     if attrs is None:
         attrs = {}
 
-    return GUI_PANEL().find_works(key=any_key, attrs=attrs)
+    return SystemPanel().find_works(key=any_key, attrs=attrs)
 
 
 def get_summary():
-    return GUI_PANEL().get_summary()
+    return SystemPanel().get_summary()
 
 
 def get_school_psar(school_name, save=False):
     if save is True:
-        GUI_PANEL().get_PSAR(school_name=school_name, save=save)
+        SystemPanel().get_psar(school_name=school_name, save=save)
         os.startfile(out_flow_path)
     else:
-        print(GUI_PANEL().get_PSAR(school_name=school_name, save=save))
+        print(SystemPanel().get_psar(school_name=school_name, save=save))
 
 
 def get_all_class_name():
-    with open(ROOT_DATABASE + '/TPTDP/class_name.txt', 'r', encoding='utf-8') as f:
+    with open(ROOT_DIR_DATABASE + '/tpd/class_name.txt', 'r', encoding='utf-8') as f:
         return [i.strip() for i in f.readlines()]
 
 
-def run_crawl_to_capture_workData(work_id='', power: int = 30, ):
+def run_crawl_to_capture_data(work_id='', power: int = 30, ):
     """
     调度爬虫采集数据的接口，当work_id ='‘ 时,采集全部在库id数据
     :param power: int ∈[1, ∞) 弹性协程功率
     :param work_id: list[str,str....] or str ,作品编号，支持列表输入
     :return:
     """
-    from SpiderNest.cnjsj_spider import CnJsjSpider
-    from MiddleWare.cmp_data import comp_workData
+    from spiders.cnjsj import CnJsjSpider
+    from middleware.cmp_data import comp_workData
 
     try:
         # 启动采集程序
@@ -318,17 +317,17 @@ def run_crawl_to_capture_workData(work_id='', power: int = 30, ):
 
         # 打印预抓取信息
         if isinstance(work_id, str):
-            Println()
+            println()
         elif isinstance(work_id, list):
-            Println()
+            println()
 
     finally:
         # 垃圾释放
         os.remove(version_control('fn'))
 
 
-def run_crawl_to_backup_workData(work_id, power: int = 4):
-    from SpiderNest.ppy_flow_spider import go_bbr_spider
+def run_crawl_to_backup_data(work_id, power: int = 4):
+    from spiders.ppy_flow import go_bbr_spider
     go_bbr_spider(work_target=work_id, power=power)
 
 

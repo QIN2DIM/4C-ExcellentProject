@@ -1,3 +1,12 @@
+from datetime import datetime
+
+import gevent
+from gevent.queue import Queue
+from retrying import retry
+from selenium.webdriver import Chrome, ChromeOptions, DesiredCapabilities
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
+
 from config import *
 
 # 任务队列
@@ -21,7 +30,7 @@ class WebCopySpider(object):
         self.start()
 
     @staticmethod
-    def set_spiderOption():
+    def set_spider_option():
         """
         浏览器初始化
         :return:
@@ -35,7 +44,7 @@ class WebCopySpider(object):
         options.add_argument('lang=zh_CN.UTF-8')
 
         # fake UserAgent
-        options.add_argument('user-agent={}'.format(UserAgent().random))
+        options.add_argument(f'user-agent={SPIDER_HEADERS["user-agent"]}')
 
         options.add_argument('Connection:"close"')
         # 隐身模式
@@ -51,8 +60,8 @@ class WebCopySpider(object):
         """自定义选项"""
 
         # 无反爬虫机制：高性能启动，禁止图片加载及js动画渲染，加快selenium页面切换效率
-        def NonAnti():
-            chrome_prefs = {"profile.default_content_settings"        : {"images": 2, 'javascript': 2},
+        def non_anti():
+            chrome_prefs = {"profile.default_content_settings": {"images": 2, 'javascript': 2},
                             "profile.managed_default_content_settings": {"images": 2}}
             options.experimental_options['prefs'] = chrome_prefs
             options.add_experimental_option('excludeSwitches', ['enable-automation'])
@@ -66,11 +75,11 @@ class WebCopySpider(object):
             return d_c
 
         if anti is False:
-            DC = NonAnti()
+            dc = non_anti()
             try:
-                return Chrome(options=options, desired_capabilities=DC, executable_path=CHROME_CODE_PATH)
+                return Chrome(options=options, desired_capabilities=dc, executable_path=CHROME_CODE_PATH)
             except OSError:
-                return Chrome(options=options, desired_capabilities=DC)
+                return Chrome(options=options, desired_capabilities=dc)
 
         # 未指定ChromeDriver，默认读取环境变量
         if CHROME_CODE_PATH == '':
@@ -80,7 +89,7 @@ class WebCopySpider(object):
 
     @staticmethod
     def error_log(info: str):
-        with open(log_fp, 'a', encoding='utf-8') as f:
+        with open(LOG_PATH, 'a', encoding='utf-8') as f:
             now_ = '\n\n[{}]\n'.format(str(datetime.now()).split('.')[0])
             f.write(now_ + info)
 
@@ -88,12 +97,12 @@ class WebCopySpider(object):
     def get_page(self, target, file_name):
 
         # 接管Chrome
-        api = self.set_spiderOption()
+        api = self.set_spider_option()
 
         api.get(target)
 
         # 等待元素全部加载
-        WebDriverWait(api, 100).until(EC.presence_of_all_elements_located)
+        WebDriverWait(api, 100).until(expected_conditions.presence_of_all_elements_located)
 
         res = api.execute_cdp_cmd('Page.captureSnapshot', {})
 
@@ -112,7 +121,7 @@ class WebCopySpider(object):
         global count
         while not works_idQ.empty():
             # target : url
-            target: str = demo_url + 'keys={}'.format(works_idQ.get_nowait())
+            target: str = DEMO_URL + 'keys={}'.format(works_idQ.get_nowait())
 
             # 将《作品编号.mhtml》作为文件名
             file_name = target.split('=')[-1].strip() + '.mhtml'
@@ -120,10 +129,10 @@ class WebCopySpider(object):
             # 扫描输出路径，若该文件已留下采集痕迹，则跳过采集，否则启动爬虫程序
             if file_name not in BACKUP_CASHED_FILE:
                 # 合并文件输出路径
-                file_outPath = os.path.join(BACKUP_OUT_PATH, file_name)
+                file_out_path = os.path.join(BACKUP_PATH, file_name)
                 try:
                     # 采集网页
-                    self.get_page(target=target, file_name=file_outPath)
+                    self.get_page(target=target, file_name=file_out_path)
 
                     # 打印调试信息
                     print(magic_msg('\r>>> 【{}/{}】任务队列:{}'.format(count, max_len, target), 'm'), end='')

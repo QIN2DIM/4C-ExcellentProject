@@ -49,13 +49,13 @@ C4中国大学生计算机设计大赛 :scroll:**历史作品博物馆**:scroll:
 - 从`config`配置文件中打印变量`title`即可查询信息键
 
 ```python
-from MiddleWare import app
+from middleware import app
 from config import *
 
 if __name__ == '__main__':
     id_list = ['75945','68589']
     # app.run_crawl_to_capture_workData(work_id='72862',power=30)
-    app.run_crawl_to_capture_workData(id_list, id_list.__len()__)
+    app.run_crawl_to_capture_data(id_list, id_list.__len()__)
 ```
 
 ![image-20200901181716579](https://i.loli.net/2020/09/07/xjLGXY32JEmWvIb.png)
@@ -73,12 +73,12 @@ if __name__ == '__main__':
   - 该功能需要联网使用，请确保网络通畅
 
 ```python
-from MiddleWare import app
+from middleware import app
 from config import *
 
 if __name__ == '__main__':
     # 话说这个id作品好赞...开眼了..来自华科大佬的神仙作品 tql！！
-    app.run_crawl_to_backup_workData('72862',power=1)
+    app.run_crawl_to_backup_data('72862',power=1)
 ```
 
 <img src="https://i.loli.net/2020/09/01/3nIbWH5cEiuDVs9.png" alt="QQ截图20200901181750" style="zoom:80%;" />
@@ -90,7 +90,7 @@ if __name__ == '__main__':
 在从`MiddleWare`中导入`app`，即可调用脚本功能，别忘了调用`config`配置文件设置全局变量~
 
 ```python
-from MiddleWare import app
+from middleware import app
 from config import *
 ```
 
@@ -103,7 +103,7 @@ from config import *
   - save = 保存输出。默认为False；建议为True，运行后会在`/dataBase/PSAR`目录下生成对应学校的分析结果，文件格式为`.json`，信息键仅包括`获奖信息`以及`作品链接`。文件会**自动打开**。
 
 ```python
-from MiddleWare import app
+from middleware import app
 from config import *
 
 if __name__ == '__main__':
@@ -179,7 +179,7 @@ if __name__ == '__main__':
 - 食用说明：`level`和`class_`都不是必选参数，比如只想知道一等奖的所有作品，只需传入`level`即可，`class_`可不传或传入空字符串。
 
 ```python
-from MiddleWare import app
+from middleware import app
 from config import *
 
 if __name__ == '__main__':
@@ -204,7 +204,7 @@ if __name__ == '__main__':
 - 运行后会在`/dataBase/PSAR/ASH.json`中留下临时文件
 
 ```python
-from MiddleWare import app
+from middleware import app
 from config import *
 
 if __name__ == '__main__':
@@ -246,7 +246,7 @@ def load_data_from_id_set(mode) -> list:
 - 食用方法
 
 ```python
-from MiddleWare import app
+from middleware import app
 
 if __name__ == '__main__':
     # 返回无表头 id 列表

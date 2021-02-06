@@ -1,12 +1,13 @@
 """"合并数据，工程核心文件，请勿挪动或删改"""
 
 import csv
-from config import version_control, comp_table_fp, id_fp, title
+
+from config import version_control, ID_FP, TITLE
 
 
 def load_id_set_01() -> list:
     """固定的id池"""
-    with open(id_fp, 'r', encoding='utf-8') as f:
+    with open(ID_FP, 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
         data = [[i[1], i] for i in reader if i[1] != 'N/A']
 
@@ -55,12 +56,12 @@ def merge_data() -> list:
             pass
 
 
-def outFlow(DATA: list):
+def out_flow(data: list):
     with open(version_control('new', '合成'), 'w', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(title)
+        writer.writerow(TITLE)
         try:
-            for data in DATA:
+            for data in data:
                 writer.writerow(data)
         except TypeError:
             pass
@@ -68,6 +69,4 @@ def outFlow(DATA: list):
 
 # 合并数据接口
 def comp_workData():
-    outFlow(merge_data())
-
-
+    out_flow(merge_data())

@@ -1,3 +1,11 @@
+from datetime import datetime
+from urllib.parse import urlencode
+
+import gevent
+import requests
+from bs4 import BeautifulSoup
+from gevent.queue import Queue
+
 from config import *
 
 # 代理ip
@@ -20,7 +28,7 @@ title = ['作品编号', '作品名称', '作品分类', '作品简介', '开源
          '作品效果图', '设计思路', '设计重点和难点', '指导老师自评', '其他说明', '部署链接1', '部署链接2', '插图']
 
 
-def load_idQ(works_command: str or list):
+def load_id_queue(works_command: str or list):
     """
 
     :param works_command:
@@ -56,20 +64,20 @@ def load_idQ(works_command: str or list):
         max_len = idQ.qsize()
 
 
-def save_data(flow=None, INIT=False):
+def save_data(flow=None, _init=False):
     """
 
     :param flow:
-    :param INIT:
+    :param _init:
     :return:
     """
 
     if flow is None:
         flow = []
-    if INIT:
+    if _init:
         with open(path_, 'w', encoding='utf-8', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(title)
+            writer.writerow(TITLE)
             print(magic_msg('>>> the csv file has been initialed\n>>> {}'.format(path_), 'g'))
     with open(path_, 'a', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
@@ -80,9 +88,9 @@ class CnJsjSpider(object):
     """中国大学生计算机设计大赛 作品信息采集"""
 
     def __init__(self, work_id=''):
-        save_data(INIT=True)
+        save_data(_init=True)
 
-        load_idQ(work_id)
+        load_id_queue(work_id)
 
     @staticmethod
     def handle_html(key):
@@ -92,7 +100,7 @@ class CnJsjSpider(object):
         data = {
             'keys': key
         }
-        url = demo_url + urlencode(data)
+        url = DEMO_URL + urlencode(data)
         count += 1
         print(magic_msg('\r>>>【{}/{}】 goto {}'.format(count, max_len, url), 'c'), end='')
 
@@ -116,7 +124,7 @@ class CnJsjSpider(object):
             elif res.status_code == 302:
                 print(magic_msg(text=url, text_color='r'))
 
-        except RequestException:
+        except requests.exceptions.RequestException:
             print(magic_msg(url, text_color='yellow'))
             return None
 
@@ -137,7 +145,7 @@ class CnJsjSpider(object):
         flag_flow = [info.text for info in soup.find_all('td', attrs={'colspan': '5'})]
 
         # 解析图片链接
-        img_flow = [home + img['src'] for img in soup.find_all('img')]
+        img_flow = [HOME_PAGE + img['src'] for img in soup.find_all('img')]
         try:
             link_1 = data_flow[8][5:].strip()
             link_2 = data_flow[9][5:].strip()
@@ -145,23 +153,23 @@ class CnJsjSpider(object):
             link_1, link_2 = 'N/A', 'N/A'
 
         # 组装数据流
-        OUT_FLOW = {
-            '作品编号'         : home + '/chaxun/?keys=' + flag_flow[0],
-            '作品名称'         : flag_flow[1],
-            '作品分类'         : flag_flow[-1],
-            '作品简介'         : data_flow[0][4:].strip(),
+        out_flow = {
+            '作品编号': HOME_PAGE + '/chaxun/?keys=' + flag_flow[0],
+            '作品名称': flag_flow[1],
+            '作品分类': flag_flow[-1],
+            '作品简介': data_flow[0][4:].strip(),
             '开源代码与组件使用情况说明': data_flow[1][13:].strip(),
-            '作品安装说明'       : data_flow[2][6:].strip(),
-            '作品效果图'        : data_flow[3][5:].strip(),
-            '设计思路'         : data_flow[4][4:].strip(),
-            '设计重点和难点'      : data_flow[5][7:].strip(),
-            '指导老师自评'       : data_flow[6][6:].strip(),
-            '其他说明'         : data_flow[7][4:].strip(),
-            '部署链接1'        : link_1,
-            '部署链接2'        : link_2,
-            '插图'           : img_flow
+            '作品安装说明': data_flow[2][6:].strip(),
+            '作品效果图': data_flow[3][5:].strip(),
+            '设计思路': data_flow[4][4:].strip(),
+            '设计重点和难点': data_flow[5][7:].strip(),
+            '指导老师自评': data_flow[6][6:].strip(),
+            '其他说明': data_flow[7][4:].strip(),
+            '部署链接1': link_1,
+            '部署链接2': link_2,
+            '插图': img_flow
         }
-        return OUT_FLOW
+        return out_flow
 
     def coroutines_acceleration(self, power: int, ):
         """
@@ -195,16 +203,16 @@ class CnJsjSpider(object):
                 flow: dict = self.parse_html(html)
 
                 # 留下痕迹
-                Println(flow)
+                println(flow)
 
                 # 保存数据
                 save_data(flow=list(flow.values()))
 
             except Exception as et:
                 # 任务出错，记录日志
-                with open(log_fp, 'a', encoding='utf-8', ) as f:
+                with open(LOG_PATH, 'a', encoding='utf-8', ) as f:
                     now_ = str(datetime.now()).strip('.')[0]
-                    log_msg = home + '/chaxun/?keys={}\n'.format(key)
+                    log_msg = HOME_PAGE + '/chaxun/?keys={}\n'.format(key)
                     err_msg = """
                     >>>【{}】
                     ERROR_KEY:{}
