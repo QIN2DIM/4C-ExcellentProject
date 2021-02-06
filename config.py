@@ -219,21 +219,6 @@ def Println(entity=None, ):
         )
 
 
-# 脚本环境初始化
-def INIT_USER_AGENT():
-    """
-    将伪装请求头文件写入系统缓存，不执行该初始化步骤 fake-useragent库将发生致命错误
-    :return:
-    """
-    import tempfile
-    if 'fake_useragent_0.1.11.json' not in os.listdir(tempfile.gettempdir()):
-        os.system('copy {} {}'.format(
-            ROOT_DATABASE + '/fake_useragent_0.1.11.json',
-            tempfile.gettempdir() + '/fake_useragent_0.1.11.json'
-        ))
-
-
-INIT_USER_AGENT()
 print(magic_msg(''.center(100, '#'), 'w'))
 print(magic_msg('>>> 欢迎使用|=< C4-2020中国大学生计算机设计大赛_数据采集爬虫(C4DmSpider) >=|', 'r'))
 print(magic_msg('>>> 该脚本使用协程调度采集任务，请合理配置采集参数!', 'm'))

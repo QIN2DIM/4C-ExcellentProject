@@ -2,7 +2,7 @@ import os
 
 import requests
 from bs4 import BeautifulSoup
-from config import SPIDER_HEADERS, ROOT_DATABASE
+from config import SPIDER_HEADERS
 
 
 class SnsProjSpider(object):
@@ -74,8 +74,10 @@ def checker_of_fileExit(file_name):
 
 
 def get_211():
+    from config import ROOT_DATABASE
     return checker_of_fileExit(ROOT_DATABASE + '/TPTDP/get_school_211.txt')
 
 
 def get_985():
+    from config import ROOT_DATABASE
     return checker_of_fileExit(ROOT_DATABASE + '/TPTDP/get_school_985.txt')
