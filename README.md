@@ -2,6 +2,8 @@
 
 > 国内部分地区局域网可能无法正常显示github插图，请跳转语雀同步文档
 
+**开放接口已关闭，请访问[备份镜像](https://github.com/QIN2DIM/4C-ExcellentProject/issues/4)查询下载作品信息。**
+
 # C4-2020中国大学生计算机设计大赛 历史作品博物馆
 
 C4中国大学生计算机设计大赛 :scroll:**历史作品博物馆**:scroll:
